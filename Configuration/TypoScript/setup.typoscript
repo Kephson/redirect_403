@@ -1,0 +1,9 @@
+config.typolinkLinkAccessRestrictedPages_addParams = &return_url=###RETURN_URL###
+
+# Redirect after login on Login page to previous page
+# configure the fe_login plugin
+plugin.tx_felogin_pi1 {
+  showLogoutFormAfterLogin = 0
+  redirectMode = logout,getpost,referer
+  redirectFirstMethod = 1
+}

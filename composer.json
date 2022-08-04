@@ -1,0 +1,44 @@
+{
+	"name": "ehaerer/redirect-403",
+	"type": "typo3-cms-extension",
+	"version": "1.0.0",
+	"description": "Redirect error 403 to login page or information page",
+	"homepage": "https://ephra.im",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Ephraim Härer",
+			"role": "Developer"
+		}
+	],
+	"keywords": [
+		"TYPO3 CMS",
+		"Redirect",
+		"Error",
+		"403"
+	],
+	"require": {
+		"php": "^7.4",
+		"typo3/cms-core": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-felogin": "^9.5 || ^10.4 || ^11.5"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"EHAERER\\Redirect403\\": "Classes"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "redirect_403"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
+	}
+}
