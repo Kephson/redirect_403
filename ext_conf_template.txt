@@ -1,4 +1,0 @@
-# cat=Welcome; type=integer; label=Page uid of protected info page
-protected_info_uid = 1
-# cat=Welcome; type=integer; label=Page uid of login page
-login_page_uid = 1
