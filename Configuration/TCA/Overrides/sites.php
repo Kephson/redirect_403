@@ -36,8 +36,10 @@ $GLOBALS['SiteConfiguration']['site_errorhandling']['columns']['loginPageUid'] =
 ];
 
 // And add it to showitem
-$GLOBALS['SiteConfiguration']['site_errorhandling']['types']['Page'] = str_replace(
-    'errorContentSource',
-    'errorContentSource, protectedInfoUid, loginPageUid',
-    $GLOBALS['SiteConfiguration']['site_errorhandling']['types']['Page']
-);
+if (isset($GLOBALS['SiteConfiguration']['site_errorhandling']['types']['Page']['showitem'])) {
+    $GLOBALS['SiteConfiguration']['site_errorhandling']['types']['Page']['showitem'] = str_replace(
+        'errorContentSource',
+        'errorContentSource, protectedInfoUid, loginPageUid',
+        ['SiteConfiguration']['site_errorhandling']['types']['Page']['showitem']
+    );
+}
