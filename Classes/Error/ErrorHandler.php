@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 final class ErrorHandler implements PageErrorHandlerInterface
 {
@@ -30,12 +31,12 @@ final class ErrorHandler implements PageErrorHandlerInterface
     protected $statusCode;
 
     /**
-     * @var int Page id of information page about access
+     * @var string Page id of information page about access
      */
     protected $uriProtectedInfoUid;
 
     /**
-     * @var int Page id of login page
+     * @var string Page id of login page
      */
     protected $uriLoginUid;
 
@@ -73,10 +74,9 @@ final class ErrorHandler implements PageErrorHandlerInterface
         $siteConfig = $site->getConfiguration();
         $this->checkPageIdsFromSiteConfig($siteConfig);
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $uriBuilder = $objectManager->getEmptyObject(UriBuilder::class);
-        $uriProtectedInfo = $uriBuilder->reset()->setTargetPageUid($this->uriProtectedInfoUid)->build();
-        $uriLogin = $uriBuilder->reset()->setTargetPageUid($this->uriLoginUid)->build();
+        $cobj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $uriProtectedInfo = $cobj->typoLink_URL($this->uriProtectedInfoUid);
+        $uriLogin = $cobj->typoLink_URL($this->uriLoginUid);
 
         if ($this->statusCode === 403) {
             /* check whether user is logged in */

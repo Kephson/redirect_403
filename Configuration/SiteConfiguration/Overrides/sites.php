@@ -13,7 +13,7 @@ $GLOBALS['SiteConfiguration']['site_errorhandling']['columns'] += [
             'fieldControl' => [
                 'linkPopup' => [
                     'options' => [
-                        'blindLinkOptions' => 'file,telephone,mail,spec,folder',
+                        'blindLinkOptions' => 'file,telephone,mail,spec,folder,external',
                     ]
                 ],
             ],
@@ -29,7 +29,7 @@ $GLOBALS['SiteConfiguration']['site_errorhandling']['columns'] += [
             'fieldControl' => [
                 'linkPopup' => [
                     'options' => [
-                        'blindLinkOptions' => 'file,telephone,mail,spec,folder',
+                        'blindLinkOptions' => 'file,telephone,mail,spec,folder,external',
                     ]
                 ],
             ],
