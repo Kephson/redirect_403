@@ -33,6 +33,6 @@ class ErrorHandlerTest extends UnitTestCase
      */
     public function isExtKeyValid(): void
     {
-        self::assertContainsEquals('redirect_403', self::EXTKEY);
+        self::assertStringContainsString('redirect_403', self::EXTKEY);
     }
 }
