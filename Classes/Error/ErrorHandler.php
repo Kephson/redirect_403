@@ -6,15 +6,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Error\PageErrorHandler\PageErrorHandlerInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 final class ErrorHandler implements PageErrorHandlerInterface
@@ -28,17 +25,17 @@ final class ErrorHandler implements PageErrorHandlerInterface
     /**
      * @var int
      */
-    protected $statusCode;
+    protected $statusCode = 0;
 
     /**
      * @var string Page id of information page about access
      */
-    protected $uriProtectedInfoUid;
+    protected $uriProtectedInfo = '';
 
     /**
      * @var string Page id of login page
      */
-    protected $uriLoginUid;
+    protected $uriLogin = '';
 
     /**
      * @var array
@@ -66,26 +63,20 @@ final class ErrorHandler implements PageErrorHandlerInterface
         array                  $reasons = []
     ): ResponseInterface
     {
-        $extSettings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(self::EXTKEY);
-        $this->uriProtectedInfoUid = $extSettings['protected_info_uid'];
-        $this->uriLoginUid = $extSettings['login_page_uid'];
-
         $site = $request->getAttribute('site');
         $siteConfig = $site->getConfiguration();
         $this->checkPageIdsFromSiteConfig($siteConfig);
 
-        $cobj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-        $uriProtectedInfo = $cobj->typoLink_URL($this->uriProtectedInfoUid);
-        $uriLogin = $cobj->typoLink_URL($this->uriLoginUid);
-
         if ($this->statusCode === 403) {
             /* check whether user is logged in */
             $context = GeneralUtility::makeInstance(Context::class);
-            if ($context->getPropertyFromAspect('frontend.user', 'isLoggedIn')) {
-                //show page with info that the access restricted page can't be visited because of missing access rights
-                return new RedirectResponse($uriProtectedInfo);
+            if ($context->getPropertyFromAspect('frontend.user', 'isLoggedIn') && $this->uriProtectedInfo) {
+                /* show page with info that the access restricted page can't be visited because of missing access rights */
+                return new RedirectResponse($this->uriProtectedInfo);
             }
-            return new RedirectResponse($uriLogin . '?return_url=' . $request->getUri()->getPath(), 403);
+            if ($this->uriLogin) {
+                return new RedirectResponse($this->uriLogin . '?return_url=' . $request->getUri()->getPath(), 403);
+            }
         }
         return new NullResponse();
     }
@@ -94,17 +85,21 @@ final class ErrorHandler implements PageErrorHandlerInterface
      * @param array $siteConfig Site config array
      * @return void
      */
-    private function checkPageIdsFromSiteConfig($siteConfig)
+    private function checkPageIdsFromSiteConfig($siteConfig): void
     {
+        $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+
+        $uriLogin = $contentObject->typoLink_URL($this->uriLoginUid);
+
         if (isset($siteConfig['errorHandling'])) {
             foreach ($siteConfig['errorHandling'] as $errorHandler) {
-                if ($errorHandler['errorCode'] === 403) {
-                    if (isset($errorHandler['protectedInfoUid'])) {
-                        $this->uriProtectedInfoUid = $errorHandler['protectedInfoUid'];
-                    }
-                    if (isset($errorHandler['loginPageUid'])) {
-                        $this->uriLoginUid = $errorHandler['loginPageUid'];
-                    }
+                if (isset($errorHandler['protectedInfoUid'])) {
+                    $uriProtectedInfoUid = $errorHandler['protectedInfoUid'];
+                    $this->uriProtectedInfo = $contentObject->typoLink_URL($uriProtectedInfoUid);
+                }
+                if (isset($errorHandler['loginPageUid'])) {
+                    $uriLoginUid = $errorHandler['loginPageUid'];
+                    $this->uriLogin = $contentObject->typoLink_URL($uriLoginUid);
                 }
             }
         }

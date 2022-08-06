@@ -3,7 +3,6 @@
 	"description": "Redirect error 403 to login page or information page",
 	"license": "GPL-2.0-or-later",
 	"type": "typo3-cms-extension",
-	"version": "1.0.0",
 	"keywords": [
 		"TYPO3 CMS",
 		"Redirect",
@@ -44,7 +43,9 @@
 	},
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "redirect_403"
+			"extension-key": "redirect_403",
+			"web-dir": ".build/web",
+			"app-dir": ".build"
 		}
 	},
 	"scripts": {
