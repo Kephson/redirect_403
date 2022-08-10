@@ -36,10 +36,19 @@ Please report issue directly in the [issue tracker in the Github repository][3].
 
 ## 4 Administration corner
 
-### 4.1 Settings in extension configuration
+### 4.1 Settings in the site configuration
 
-* **protected_info_uid** - Set the page uid of a page with information why the user has no access to the page, also after login
-* **login_page_uid** - Set the page uid of the login page
+* **protectedInfoLink** - Select a page with information why the users has no access here
+* **loginPageLink** - Select a page where to find the login module
+
+Your errorHandling configuration should look like this in your **/config/sites/my-site.yaml** file:
+
+        errorHandling:
+          - errorCode: 403
+            errorHandler: PHP
+            errorPhpClassFQCN: EHAERER\Redirect403\Error\ErrorHandler
+            protectedInfoLink: 't3://page?uid=1'
+            loginPageLink: 't3://page?uid=2'
 
 ### 4.2 Changelog
 

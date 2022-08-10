@@ -3,9 +3,9 @@
 
 // Configure a new simple required input field to site
 $GLOBALS['SiteConfiguration']['site_errorhandling']['columns'] += [
-    'protectedInfoUid' => [
+    'protectedInfoLink' => [
         'label' => 'Page id with information about protection',
-        'description' => 'my desc 1',
+        'description' => 'Select a page with information why the users has no access here',
         'config' => [
             'type' => 'input',
             'eval' => '',
@@ -19,9 +19,9 @@ $GLOBALS['SiteConfiguration']['site_errorhandling']['columns'] += [
             ],
         ],
     ],
-    'loginPageUid' => [
+    'loginPageLink' => [
         'label' => 'Page id of login page',
-        'description' => 'my desc 2',
+        'description' => 'Select a page where to find the login module',
         'config' => [
             'type' => 'input',
             'eval' => '',
@@ -38,6 +38,6 @@ $GLOBALS['SiteConfiguration']['site_errorhandling']['columns'] += [
 ];
 
 // And add it to showitem
-if (isset($GLOBALS['SiteConfiguration']['site_errorhandling']['types']['Page']['showitem'])) {
-    $GLOBALS['SiteConfiguration']['site_errorhandling']['types']['Page']['showitem'] .= ', protectedInfoUid, loginPageUid';
+if (isset($GLOBALS['SiteConfiguration']['site_errorhandling']['types']['PHP']['showitem'])) {
+    $GLOBALS['SiteConfiguration']['site_errorhandling']['types']['PHP']['showitem'] .= ', protectedInfoLink, loginPageLink';
 }
