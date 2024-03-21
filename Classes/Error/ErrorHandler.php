@@ -41,6 +41,11 @@ final class ErrorHandler implements PageErrorHandlerInterface
     protected $uriLogin = '';
 
     /**
+     * @var int Page uid
+     */
+    protected $pageUid = 0;
+
+    /**
      * @var array
      */
     protected $errorHandlerConfiguration;
@@ -57,6 +62,8 @@ final class ErrorHandler implements PageErrorHandlerInterface
      * @param array $reasons
      * @return ResponseInterface
      * @throws AspectNotFoundException
+     * @throws InvalidRouteArgumentsException
+     * @throws SiteNotFoundException
      */
     public function handlePageError(
         ServerRequestInterface $request,
@@ -86,7 +93,6 @@ final class ErrorHandler implements PageErrorHandlerInterface
      * @param ServerRequestInterface $request
      * @param array $siteConfig Site config array
      * @return void
-     * @throws InvalidRouteArgumentsException
      * @throws SiteNotFoundException
      */
     private function checkPageIdsFromSiteConfig(ServerRequestInterface $request, array $siteConfig): void
@@ -113,7 +119,6 @@ final class ErrorHandler implements PageErrorHandlerInterface
      * @param string $typoLinkUrl
      * @return string
      * @throws SiteNotFoundException
-     * @throws InvalidRouteArgumentsException
      */
     protected function resolveUrl(ServerRequestInterface $request, string $typoLinkUrl): string
     {
